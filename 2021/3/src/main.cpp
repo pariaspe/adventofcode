@@ -12,13 +12,13 @@ typedef struct Bit bit;
 typedef vector<bit> bits;
 
 
-ifstream infile("input.txt");
+ifstream infile("../2021/3/input.txt");
 
 void read_input(vector<bits> &input){
     string line; 
     while (infile >> line){
         bits bline;
-        for (auto i=0; i<line.length(); i++) {
+        for (uint i=0; i<line.length(); i++) {
             bit b;
             b.value = line[i];
             bline.push_back(b);
@@ -29,16 +29,16 @@ void read_input(vector<bits> &input){
 
 void print_bits(bits input){
     bits::size_type sz = input.size();
-    for (auto i=0; i<sz; i++) {
+    for (uint i=0; i<sz; i++) {
         cout << input[i].value;
     }
 }
 
 void proccess_input(vector<bits> input, int conts[]){
     vector<bits>::size_type sz = input.size();
-    for (auto i=0; i<sz; i++) {
+    for (uint i=0; i<sz; i++) {
         bits::size_type sz2 = input[i].size();
-        for (auto j=0; j<sz2; j++){
+        for (uint j=0; j<sz2; j++){
             if ( input[i][j].value ) {
                 conts[j] += 1;
             } else {
@@ -143,7 +143,7 @@ bits getCO2(vector<bits> bitList){
 
 long fromBits(bits n){
     long bin_number = 0;
-    for (auto i=0; i<n.size(); i++) {
+    for (uint i=0; i<n.size(); i++) {
         bin_number += n[i].value*pow(10, (11-i));
     }
     // cout << bin_number << "\n";

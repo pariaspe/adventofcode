@@ -3,7 +3,7 @@
 #include <vector>
 using namespace std;
  
-ifstream infile("input.txt");
+ifstream infile("../2021/2/input.txt");
 
 int read_cmds(int cmds[]){
     string cmd;
@@ -22,7 +22,7 @@ void calc_output(int cmds[]){
     cout << cmds[0] * (cmds[1] - cmds[2]) << "\n";
 }
 
-int new_method(int &hor, int &depth) {
+void new_method(int &hor, int &depth) {
     string cmd;
     int n;
     int aim = 0;
@@ -43,7 +43,7 @@ int main()
     // Part 2
     int hor = 0;
     int depth = 0;
-    int aim = new_method(hor, depth);
+    new_method(hor, depth);
     cout << hor << " " << depth << " " << hor*depth << "\n";
     return 0;
 }
