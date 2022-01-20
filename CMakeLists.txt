@@ -11,6 +11,7 @@ set(SOURCE_FILES
     2021/3/src/main.cpp
     2021/4/src/main.cpp
     2021/5/src/main.cpp
+    2021/6/src/main.cpp
 )
 
 foreach(sourcefile ${SOURCE_FILES})
