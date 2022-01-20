@@ -6,6 +6,10 @@
 
 using namespace std;
 
+template <typename T> int sgn(T val) {
+    return (T(0) < val) - (val < T(0));
+}
+
 struct Coord {
     uint x = 0;
     uint y = 0;
@@ -34,6 +38,7 @@ class Vent {
 
         void print() { cout << start.x << "," << start.y << " -> " << end.x << "," << end.y << endl; };
         bool isStraight() { return (start.x == end.x || start.y == end.y); };
+        bool isDiagonal();
         vector<coord> getPoints();
 };
 
@@ -42,6 +47,11 @@ Vent::Vent(uint x1, uint y1, uint x2, uint y2) {
     start.y = y1;
     end.x = x2;
     end.y = y2;
+}
+
+bool Vent::isDiagonal() {
+    int dx = end.x - start.x, dy = end.y - start.y;
+    return abs(dx) == abs(dy); 
 }
 
 vector<coord> Vent::getPoints() {
@@ -60,6 +70,14 @@ vector<coord> Vent::getPoints() {
             coord c;
             c.x = i;
             c.y = start.y;
+            myCoords.push_back(c);
+        }
+    } else if (isDiagonal()) {
+        int dx = end.x - start.x, dy = end.y - start.y;
+        for (int i=0; i<=abs(dx); i++) {  // abs(dx) == abs(dy)
+            coord c;
+            c.x = start.x + i*sgn(dx);
+            c.y = start.y + i*sgn(dy);
             myCoords.push_back(c);
         }
     } else {
@@ -97,7 +115,7 @@ int main() {
     map<coord, int> ventPoses;
     vector<Vent>::iterator it;
     for (it = myVents.begin(); it != myVents.end(); ++it) {
-        if (it->isStraight()) {
+        if (it->isStraight() || it->isDiagonal()) { // Part 1 --> only straight lines
             // it->print();
             vector<coord> pts;
             pts = it->getPoints();
