@@ -1,52 +1,50 @@
-#include <iostream>
 #include <fstream>
-#include<vector>
+#include <iostream>
+#include <vector>
 using namespace std;
- 
-ifstream infile("../2021/1/input.txt");
 
-int count_increment(){
-    int current, previous, cont = 0;
-    while (infile >> current){
-        if (current > previous) {
-            cont += 1;
-        }
-        previous = current;
+ifstream infile("../1/input.txt");
+
+int count_increment() {
+  int current, previous, cont = 0;
+  while (infile >> current) {
+    if (current > previous) {
+      cont += 1;
     }
-    return cont;
+    previous = current;
+  }
+  return cont;
 }
 
-vector<int> count_sums(){
-    vector<int>measurements;
+vector<int> count_sums() {
+  vector<int> measurements;
 
-    int m;
-    while(infile >> m){
-        measurements.push_back(m);
-    }
+  int m;
+  while (infile >> m) {
+    measurements.push_back(m);
+  }
 
-    return measurements;
+  return measurements;
 }
 
-int main()
-{
-    // Part 1
-    int increment = count_increment();
-    cout << "Increment: " << increment << "\n";
+int main() {
+  // Part 1
+  int increment = count_increment();
+  cout << "Increment: " << increment << "\n";
 
+  // Part 2
+  // vector<int> test = count_sums();
+  // vector<int>::size_type sz = test.size();
+  // int current, prev, cont = -1;
+  // for (uint i=0; i<sz; i++) {
+  //     if (i == 0) { continue; }  // skip partial window
+  //     if (i+1 > sz) { break; }  // last window
 
-    // Part 2
-    // vector<int> test = count_sums();
-    // vector<int>::size_type sz = test.size();
-    // int current, prev, cont = -1;
-    // for (uint i=0; i<sz; i++) {
-    //     if (i == 0) { continue; }  // skip partial window
-    //     if (i+1 > sz) { break; }  // last window
+  //     current = test[i-1] + test[i] + test[i+1];
+  //     if (current > prev) { cont += 1; }
+  //     prev = current;
+  // }
 
-    //     current = test[i-1] + test[i] + test[i+1];
-    //     if (current > prev) { cont += 1; }
-    //     prev = current;
-    // }
-
-    // cout << cont << "\n";
-    return 0;
+  // cout << cont << "\n";
+  return 0;
 }
