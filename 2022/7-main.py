@@ -1,6 +1,7 @@
 from __future__ import annotations
 from dataclasses import dataclass, field
 
+
 @dataclass
 class File:
     name: str
@@ -8,6 +9,7 @@ class File:
 
     def __str__(self):
         return f"- {self.name} (file, size={self.size})\n"
+
 
 @dataclass
 class Folder:
@@ -27,7 +29,7 @@ class Folder:
         for file in self.files:
             size += file.size
         return size
-    
+
     def size(self):
         size = self.files_size()
         for folder in self.subfolders.values():
@@ -42,12 +44,14 @@ class Folder:
             output += f"    {folder}"
         return output
 
+
 def parse_cmd(cmd: str):
     """returns dir"""
     tokens = cmd.split(" ")
     if tokens[1] == "cd":
         return tokens[2]
     return ""
+
 
 def parse_output(output: str, current_dir: Folder):
     tokens = output.split(" ")
@@ -56,16 +60,20 @@ def parse_output(output: str, current_dir: Folder):
     else:
         current_dir.add_file(File(tokens[1], int(tokens[0])))
 
-def find_folder(root: Folder, max_size: int = 0):
+
+def find_folder(root: Folder, max_size: int = 0, min_size: int = 0):
     folders = set()
-    if max_size == 0 or root.size() <= max_size:
+    if (max_size == 0 or root.size() <= max_size) and \
+            (min_size == 0 or root.size() >= min_size):
         folders.add((root.name, root.size()))
-    
+
     for folder in root.subfolders.values():
-        folders = folders.union(find_folder(folder, max_size))
-        if max_size == 0 or folder.size() <= max_size:
+        folders = folders.union(find_folder(folder, max_size, min_size))
+        if (max_size == 0 or folder.size() <= max_size) and \
+                (min_size == 0 or folder.size() >= min_size):
             folders.add((folder.name, folder.size()))
     return folders
+
 
 def main(filename):
     with open(filename) as f:
@@ -93,6 +101,14 @@ def main(filename):
     for folder in light_folders:
         part_one_sol += folder[1]
     print("SOL PART 1:", part_one_sol)
+
+    total_size = 70000000
+    free_space = total_size - root.size()
+    free_space = 30000000 - free_space
+
+    folders_part_two = find_folder(root, 0, free_space)
+    print(f"SOL PART 2: {min([folder[1] for folder in folders_part_two])=}")
+
 
 if __name__ == "__main__":
     # main("7-test.txt")
