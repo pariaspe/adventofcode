@@ -57,7 +57,23 @@ def part_two(filename: str) -> int:
             if not line.strip():
                 break
 
-    return 0
+            if line.startswith('Time'):
+                _, time = line.strip().split(':')
+                time = time.strip().split()
+                time = float("".join(time))
+                continue
+
+            if line.startswith('Distance'):
+                _, distance = line.strip().split(':')
+                distance = distance.strip().split()
+                distance = float("".join(distance))
+                continue
+
+    x1, x2 = get_t_charge(distance, time)
+    lower = floor(x1) if x1 < x2 else floor(x2)
+    upper = ceil(x2) if x1 < x2 else ceil(x1)
+    result = upper - lower - 1
+    return result
 
 
 if __name__ == "__main__":
@@ -65,6 +81,6 @@ if __name__ == "__main__":
     solution_part_one = part_one("6.in")
     print(f"{solution_part_one=}")
 
-    # assert part_two("4-test.txt") == 30
-    # solution_part_two = part_two("4-input.txt")
-    # print(f"{solution_part_two=}")
+    assert part_two("6.ex") == 71503
+    solution_part_two = part_two("6.in")
+    print(f"{solution_part_two=}")
