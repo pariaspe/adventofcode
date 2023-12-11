@@ -18,12 +18,13 @@ class Card(Enum):
 class Hand(UserDict):
     """A hand of cards"""
 
-    def __init__(self, hand: str, bid: int) -> None:
+    def __init__(self, hand: str, bid: int, use_wildcards: bool = False) -> None:
         """Initialize a hand of cards"""
         super().__init__()
         self.hand = hand
         self.data = Counter(hand)
         self.bid = int(bid)
+        self.use_wildcards = use_wildcards
 
     @property
     def ranking(self) -> int:
@@ -37,18 +38,26 @@ class Hand(UserDict):
         One pair: 2
         High card: 1
         """
-        hand = self.data.values()
-        if 5 in hand:
+        values = self.data.values()
+        if self.use_wildcards and "J" in self.data:
+            items_sorted = sorted(
+                self.data.items(), key=lambda x: x[1], reverse=True)
+            if len(items_sorted) == 1:
+                return 7  # Hand: JJJJJ
+            max_value = items_sorted[0][0] if items_sorted[0][0] != "J" else items_sorted[1][0]
+            values = Counter(self.hand.replace("J", max_value)).values()
+
+        if 5 in values:
             return 7
-        if 4 in hand:
+        if 4 in values:
             return 6
-        if 3 in hand and 2 in hand:
+        if 3 in values and 2 in values:
             return 5
-        if 3 in hand:
+        if 3 in values:
             return 4
-        if 2 in hand and len(hand) == 3:
+        if 2 in values and len(values) == 3:
             return 3
-        if 2 in hand:
+        if 2 in values:
             return 2
         return 1
 
@@ -56,7 +65,10 @@ class Hand(UserDict):
     def stregth(self) -> int:
         """Return the strength of the hand"""
         strengh = ""
-        for card in self.hand:
+        hand = self.hand
+        if self.use_wildcards:
+            hand = self.hand.replace("J", "1")
+        for card in hand:
             if card.isdigit():
                 strengh += "0" + card
             else:
@@ -96,12 +108,20 @@ def part_one(filename: str) -> int:
 
 def part_two(filename: str) -> int:
     """Solution for part two"""
+    hands: list[Hand] = []
     with open(filename, encoding='utf-8') as f:
         for line in f.readlines():
             if not line.strip():
                 break
 
-    return 0
+            hand, bid = line.strip().split(" ")
+            hands.append(Hand(hand, bid, True))
+
+    sorted_hands = sorted(hands)
+    winnings = 0
+    for i, hand in enumerate(sorted_hands):
+        winnings += hand.bid * (i + 1)
+    return winnings
 
 
 if __name__ == "__main__":
